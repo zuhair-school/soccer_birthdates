@@ -31,8 +31,9 @@ x%>%
   mutate(month = parse_factor(raw_month, levels = month.name)) %>%
   group_by(month)%>%
   summarize(total = n())%>%
-  ggplot(mapping = aes(x = total, y = month))+
+  ggplot(mapping = aes(x = fct_rev(month), y = total))+
   geom_col()+
+  coord_flip()+
   labs(
     title = "Euro 2020 Soccer Player Birth Months",
     subtitle = "Elite players are not more likely to be born in January",
@@ -42,4 +43,3 @@ x%>%
   )
 
 ```
-
