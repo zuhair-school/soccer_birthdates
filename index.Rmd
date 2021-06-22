@@ -1,7 +1,7 @@
 ---
-title: "European Birthmonths"
+title: "European Birth Months"
 description: |
-  Welcome to the website. I hope you enjoy it!
+  Examination of European Soccer Players and if their Birthdates relate to there skill
 site: distill::distill_website
 ---
 
@@ -13,6 +13,33 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # Learn more about publishing to GitHub Pages at:
 # https://rstudio.github.io/distill/publish_website.html#github-pages
+
+library(tidyverse)
+library(lubridate)
+library(reprex)
+library(rvest)
+```
+
+
+```{r}
+
+x <- read_csv("birthdates.csv", col_types = cols(value = col_character()))
+
+x%>%
+  mutate(birthdate = parse_date(str_sub(value, 2,11)))%>%
+  mutate(raw_month = months(birthdate))%>%
+  mutate(month = parse_factor(raw_month, levels = month.name)) %>%
+  group_by(month)%>%
+  summarize(total = n())%>%
+  ggplot(mapping = aes(x = total, y = month))+
+  geom_col()+
+  labs(
+    title = "Euro 2020 Soccer Player Birth Months",
+    subtitle = "Elite players are not more likely to be born in January",
+    x = "Number of players",
+    y = NULL,
+    caption = "Data from Wikipedia"
+  )
 
 ```
 
